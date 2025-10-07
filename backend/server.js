@@ -47,6 +47,6 @@ wss.on("connection", (ws) => {
   });
 });
 
-server.listen(PORT, () => {
-  console.log(`🚀 Сервер запущен на ws://localhost:${PORT}`);
+server.listen(PORT, "0.0.0.0", () => {
+  console.log(`🚀 Сервер запущен на ws://0.0.0.0:${PORT}`);
 });
