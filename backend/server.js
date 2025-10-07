@@ -1,15 +1,17 @@
 import { WebSocketServer } from "ws";
 import http from "http";
 
-// Render или любой другой хостинг передаёт порт через process.env.PORT
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 10000;
 
-const server = http.createServer();
+// Создаём обычный HTTP сервер
+const server = http.createServer((req, res) => {
+  res.writeHead(200, { "Content-Type": "text/plain" });
+  res.end("✅ WebSocket server is running");
+});
+
 const wss = new WebSocketServer({ server });
-
 console.log(`✅ WebSocket сервер запускается на порту ${PORT}`);
 
-// Храним соответствие клиентов и комнат
 const clients = new Map();
 
 wss.on("connection", (ws) => {
@@ -26,8 +28,6 @@ wss.on("connection", (ws) => {
       }
 
       const room = clients.get(ws);
-
-      // Рассылаем сообщения только участникам комнаты
       wss.clients.forEach((client) => {
         if (
           client.readyState === client.OPEN &&
@@ -48,5 +48,5 @@ wss.on("connection", (ws) => {
 });
 
 server.listen(PORT, "0.0.0.0", () => {
-  console.log(`🚀 Сервер запущен на ws://0.0.0.0:${PORT}`);
+  console.log(`🚀 Сервер запущен и слушает порт ${PORT}`);
 });
